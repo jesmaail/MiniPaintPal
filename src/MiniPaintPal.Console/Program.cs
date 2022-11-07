@@ -9,12 +9,6 @@ var paintsList = await scraper.ScrapePageForPaints(pageToScrape);
 
 var x = "Breakpoint line";
 
-// TODO - Change to an API
-// TODO - Models
-// TODO - Integration test with a known website and paint list
-// TODO - want to return a JSON with different mixed colour top-levels with their component part paints
-// TODO - Also offer up raw paints only not the mixed colours
-
 public class GamesWorkshopScraper
 {
     private const string GW_RESOURCE_URL = "https://www.games-workshop.com/resources/";
