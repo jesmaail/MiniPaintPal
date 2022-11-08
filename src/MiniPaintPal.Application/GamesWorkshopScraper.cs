@@ -1,4 +1,7 @@
-﻿using AngleSharp;
+﻿
+using AngleSharp;
+using MiniPaintPal.Application.Entities;
+using MiniPaintPal.Application.Helpers;
 using PuppeteerSharp;
 
 namespace MiniPaintPal.Application;
@@ -8,9 +11,9 @@ public class GamesWorkshopScraper
     private const string GW_RESOURCE_URL = "https://www.games-workshop.com/resources/";
     private const string COLOUR_LIST_CONTAINER_CLASSNAME = "simplebar-content";
 
-    public async Task<IEnumerable<string>> ScrapePageForPaints(string pageUrl)
+    public async Task<IEnumerable<Paint>> ScrapePageForPaints(string pageUrl)
     {
-        var result = new List<string>();
+        var result = new List<Paint>();
 
         var pageContent = await GetPageAsString(pageUrl);
 
@@ -23,7 +26,7 @@ public class GamesWorkshopScraper
             .FirstOrDefault();
 
         if (colourListContainer == null)
-            return Enumerable.Empty<string>();
+            return Enumerable.Empty<Paint>();
 
         // TODO - Move some of this logic out
         foreach (var colourList in colourListContainer.Children)
@@ -34,10 +37,16 @@ public class GamesWorkshopScraper
 
             if (paintList == null) continue;
 
-            foreach (var paint in paintList.Children)
+            foreach (var paintElement in paintList.Children)
             {
-                var paintName = RetrievePaintName(paint.InnerHtml);
-                result.Add(paintName);
+                var paintNameRaw = RetrievePaintName(paintElement.InnerHtml);
+                var paintNameComponents = paintNameRaw.SplitCamelCase(' ');
+                var paint = new Paint
+                {
+                    Type = paintNameComponents[0],
+                    Name = string.Join(' ', paintNameComponents[1..]),
+                };
+                result.Add(paint);
             }
         }
         return result;
@@ -62,11 +71,6 @@ public class GamesWorkshopScraper
         var paintNameLength = paintNameRHS - paintNameLHS;
 
         var trimmedResourceMatch = resourceMatch.Substring(paintNameLHS, paintNameLength);
-
-        // TODO - Some pretty printing with the name via a model
-        // baseAbaddonBlack should come out as
-        // Type = BASE
-        // Name = AbaddonBlack
 
         return trimmedResourceMatch;
     }
