@@ -1,12 +1,16 @@
-﻿
-using AngleSharp;
+﻿using AngleSharp;
 using MiniPaintPal.Application.Entities;
 using MiniPaintPal.Application.Helpers;
 using PuppeteerSharp;
 
 namespace MiniPaintPal.Application;
 
-public class GamesWorkshopScraper
+public interface IGamesWorkshopScraper
+{
+    Task<IEnumerable<Paint>> ScrapePageForPaints(string pageUrl);
+}
+
+public class GamesWorkshopScraper : IGamesWorkshopScraper
 {
     private const string GW_RESOURCE_URL = "https://www.games-workshop.com/resources/";
     private const string COLOUR_LIST_CONTAINER_CLASSNAME = "simplebar-content";
@@ -51,6 +55,7 @@ public class GamesWorkshopScraper
         }
         return result;
     }
+
 
     private string RetrievePaintName(string paintHTMLImageString)
     {
