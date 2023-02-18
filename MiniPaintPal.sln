@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6C17EFBD-AAD0-4894-B08C-A42348293B01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniPaintPal.API", "src\MiniPaintPal.API\MiniPaintPal.API.csproj", "{02648DA3-6D91-4C82-B479-D1D09EA92106}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{02648DA3-6D91-4C82-B479-D1D09EA92106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02648DA3-6D91-4C82-B479-D1D09EA92106}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02648DA3-6D91-4C82-B479-D1D09EA92106}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02648DA3-6D91-4C82-B479-D1D09EA92106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74F376A1-7C79-44D1-BA49-3D84EE35E1D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74F376A1-7C79-44D1-BA49-3D84EE35E1D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74F376A1-7C79-44D1-BA49-3D84EE35E1D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74F376A1-7C79-44D1-BA49-3D84EE35E1D6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{02648DA3-6D91-4C82-B479-D1D09EA92106} = {6C17EFBD-AAD0-4894-B08C-A42348293B01}
+		{74F376A1-7C79-44D1-BA49-3D84EE35E1D6} = {6C17EFBD-AAD0-4894-B08C-A42348293B01}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6CF52C3B-BE41-411A-9123-77D4DD686803}
+	EndGlobalSection
+EndGlobal
