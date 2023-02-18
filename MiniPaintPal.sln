@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6C17EFBD-AAD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniPaintPal.API", "src\MiniPaintPal.API\MiniPaintPal.API.csproj", "{02648DA3-6D91-4C82-B479-D1D09EA92106}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniPaintPal.Core", "src\MiniPaintPal.Core\MiniPaintPal.Core.csproj", "{74F376A1-7C79-44D1-BA49-3D84EE35E1D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
