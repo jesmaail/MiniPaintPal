@@ -39,12 +39,10 @@ public class GWPaintRetrievalService : IGWPaintRetrievalService
 
             if(paintList == null) continue;
 
-            foreach(var paintElement in paintList.Children)
-            {
-                var paintDetails = ExtractPaintDetails(paintElement.InnerHtml);
+            var extractedPaints = paintList.Children.ToList()
+                .Select(paintElement => ExtractPaintDetails(paintElement.InnerHtml));
 
-                paintsResult.Add(paintDetails);
-            }
+            paintsResult.AddRange(extractedPaints);
         }
 
         return paintsResult;
