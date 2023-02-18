@@ -1,8 +1,14 @@
+using MiniPaintPal.Core;
+using MiniPaintPal.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+
+services.AddScoped<IWebScraper, WebScraper>();
+services.AddScoped<IGWPaintRetrievalService, GWPaintRetrievalService>();
 
 var app = builder.Build();
 
@@ -17,6 +23,10 @@ app.UseHttpsRedirection();
 
 app.MapGet("/ping", () => "Machine that goes Ping!")
     .WithName("Ping")
+    .WithOpenApi();
+
+app.MapGet("/retrieveGWPaints", async (IGWPaintRetrievalService service, string url) => await service.RetrievePaintsFromPage(url))
+    .WithName("Retrieve GW Paints")
     .WithOpenApi();
 
 app.Run();
