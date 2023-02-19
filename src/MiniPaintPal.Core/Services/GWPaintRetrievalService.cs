@@ -74,7 +74,6 @@ public class GWPaintRetrievalService : IGWPaintRetrievalService
 
         return paintList.Children.ToList()
             .Select(paintElement => ExtractPaintDetails(paintElement.InnerHtml));
-
     }
 
     private Paint ExtractPaintDetails(string paintHTMLImageString)
@@ -85,9 +84,9 @@ public class GWPaintRetrievalService : IGWPaintRetrievalService
 
         return new Paint
         {
-            Type = paintComponents[0], // TODO - Pascal case it
+            Type = paintComponents[0].ConvertToCapitalStartChar(),
             Name = string.Join(' ', paintComponents[1..]),
-            Brand = "Citadel" // TODO - Enum/Const
+            Brand = Constants.GWPaintName
         };
     }
 

@@ -8,4 +8,8 @@ public static class StringExtensions
         => Regex.Replace(source, "([A-Z])", " $1", RegexOptions.Compiled)
                 .Trim()
                 .Split(separator);
+
+
+    public static string ConvertToCapitalStartChar(this string source)
+        => string.Concat(char.ToUpper(source[0]), source[1..]);
 }
