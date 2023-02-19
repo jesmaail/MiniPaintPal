@@ -1,9 +1,12 @@
-﻿using MiniPaintPal.Core.Entities;
+﻿using AngleSharp.Dom;
+using MiniPaintPal.Core.Entities;
 using MiniPaintPal.Core.Extensions;
 
 namespace MiniPaintPal.Core.Services;
 public interface IGWPaintRetrievalService
 {
+    Task<IEnumerable<ColourScheme>> RetrieveColoursFromPage(string url);
+
     Task<IEnumerable<Paint>> RetrievePaintsFromPage(string url);
 }
 
@@ -16,37 +19,62 @@ public class GWPaintRetrievalService : IGWPaintRetrievalService
     public GWPaintRetrievalService(IWebScraper webScraper) 
         => (_webScraper) = (webScraper);
 
+    public async Task<IEnumerable<ColourScheme?>> RetrieveColoursFromPage(string url)
+    {
+        var colourListContainer = await GetColourListContainer(url);
+
+        if (colourListContainer == null)
+            return Enumerable.Empty<ColourScheme>();
+
+        return colourListContainer.Children.ToList()
+            .Select(colourScheme => GetColourSchemeDetails(colourScheme));
+    }
+
     public async Task<IEnumerable<Paint>> RetrievePaintsFromPage(string url)
+    {
+        var colourListContainer = await GetColourListContainer(url);
+
+        if (colourListContainer == null)
+            return Enumerable.Empty<Paint>();
+
+        return colourListContainer.Children.ToList()
+            .SelectMany(colourScheme => GetPaintsForColour(colourScheme));
+    }
+
+    private async Task<IElement?> GetColourListContainer(string url)
     {
         var pageDocument = await _webScraper.GetPageDocument(url);
 
-        var colourListContainer = pageDocument
+        return pageDocument
             .QuerySelectorAll("*")
             .Where(domObj => domObj.LocalName == "div" && domObj.ClassName == COLOUR_LIST_CONTAINER_CLASSNAME)
             .FirstOrDefault();
+    }
 
-        if(colourListContainer == null)
-            return Enumerable.Empty<Paint>();
+    private ColourScheme GetColourSchemeDetails(IElement colourListElement)
+    {
+        var colourNameContainer = colourListElement.GetElementsByClassName("effect-name");
+        var colourName = colourNameContainer[0].TextContent.Trim();
 
+        return new ColourScheme
+        {
+            Name = colourName,
+            Paints = GetPaintsForColour(colourListElement)
+        };
+    }
+
+    private IEnumerable<Paint> GetPaintsForColour(IElement colourListElement)
+    {
         var paintsResult = new List<Paint>();
 
-        foreach(var colourList in colourListContainer.Children)
-        {
-            var titleDiv = colourList.GetElementsByClassName("effect-name");
+        var paintList = colourListElement.GetElementsByClassName("effect-elements").FirstOrDefault();
 
-            // TODO - Get the title out so we can group paints into their resulting colours (as per the website)
-            var paintList = colourList.GetElementsByClassName("effect-elements").FirstOrDefault();
+        if (paintList == null) 
+            return Enumerable.Empty<Paint>();
 
-            if(paintList == null) continue;
+        return paintList.Children.ToList()
+            .Select(paintElement => ExtractPaintDetails(paintElement.InnerHtml));
 
-            var extractedPaints = paintList.Children.ToList()
-                .Select(paintElement => ExtractPaintDetails(paintElement.InnerHtml));
-
-            paintsResult.AddRange(extractedPaints);
-        }
-
-        return paintsResult;
-            
     }
 
     private Paint ExtractPaintDetails(string paintHTMLImageString)
@@ -57,7 +85,7 @@ public class GWPaintRetrievalService : IGWPaintRetrievalService
 
         return new Paint
         {
-            Type = paintComponents[0],
+            Type = paintComponents[0], // TODO - Pascal case it
             Name = string.Join(' ', paintComponents[1..]),
             Brand = "Citadel" // TODO - Enum/Const
         };

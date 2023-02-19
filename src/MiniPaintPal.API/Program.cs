@@ -25,8 +25,12 @@ app.MapGet("/ping", () => "Machine that goes Ping!")
     .WithName("Ping")
     .WithOpenApi();
 
-app.MapGet("/retrieveGWPaints", async (IGWPaintRetrievalService service, string url) => await service.RetrievePaintsFromPage(url))
+app.MapGet("/gwscrape/paints", async (IGWPaintRetrievalService service, string url) => await service.RetrievePaintsFromPage(url))
     .WithName("Retrieve GW Paints")
+    .WithOpenApi();
+
+app.MapGet("/gwscrape/colours", async (IGWPaintRetrievalService service, string url) => await service.RetrieveColoursFromPage(url))
+    .WithName("Retrieve GW Colours")
     .WithOpenApi();
 
 app.Run();
